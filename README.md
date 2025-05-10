@@ -16,10 +16,17 @@ docker-compose down
 
 ### Using Virtual Environment
 ```bash
+# Create and activate virtual environment
 python3 -m venv .venv
 source .venv/bin/activate
+
+# Update pip and install requirements
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Run Django server
 python manage.py runserver
 ```
 
