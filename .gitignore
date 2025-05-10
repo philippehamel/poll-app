@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so
@@ -98,6 +99,7 @@ celerybeat-schedule
 
 # Environments
 .env
+.env.local
 .venv
 env/
 venv/
@@ -122,3 +124,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Static files
+/staticfiles/
+
+# IDE specific files
+.vscode/
+.idea/

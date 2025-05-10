@@ -4,9 +4,9 @@ FROM python:3.11-slim
 # set workdir
 WORKDIR /code
 
-# install system deps (e.g. for psycopg2)
+# install system deps
 RUN apt-get update \
- && apt-get install -y --no-install-recommends gcc libpq-dev \
+ && apt-get install -y --no-install-recommends gcc libpq-dev curl \
  && rm -rf /var/lib/apt/lists/*
 
 # copy & install Python deps
