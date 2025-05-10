@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:    ${POSTGRES_DB}
+      POSTGRES_USER:  ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  web:
+    build: .
+    restart: unless-stopped
+    command: >
+      bash -c "
+      until python manage.py migrate; do
+        echo 'Waiting for Postgres...';
+        sleep 2;
+      done;
+      python manage.py collectstatic --noinput &&
+      gunicorn app.wsgi:application --bind 0.0.0:8000 --workers 3 --timeout 120
+      "
+    volumes:
+      - .:/code           # live-reload your code in dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env               # loads DATABASE_URL, etc.
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ || exit 1"]
+      interval: 30s
+      retries: 3
+
+volumes:
+  postgres_data:
