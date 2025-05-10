@@ -16,17 +16,23 @@ docker-compose down
 
 ### Using Virtual Environment
 ```bash
+# Install system dependencies first
+brew install postgresql openssl python@3.11
+
 # Create and activate virtual environment
-python3 -m venv .venv
+python3.11 -m venv .venv
 source .venv/bin/activate
 
-# Update pip and install requirements
-export LDFLAGS="-L/usr/local/opt/openssl/lib"
-export CPPFLAGS="-I/usr/local/opt/openssl/include"
-pip install --upgrade pip
+# Set required environment variables for psycopg2 installation
+export LDFLAGS="-L$(brew --prefix openssl)/lib"
+export CPPFLAGS="-I$(brew --prefix openssl)/include"
+
+# Install requirements
+pip install --upgrade pip wheel setuptools
 pip install -r requirements.txt
 
 # Run Django server
+python manage.py migrate
 python manage.py runserver
 ```
 
